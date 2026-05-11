@@ -3,7 +3,7 @@
 tol_ncdm_bg = 1.e-10
 
 recfast_Nz0=100000
-tol_thermo_integration=1.e-5
+tol_thermo_integration=1.e-8
 
 recfast_x_He0_trigger_delta = 0.01
 recfast_x_H0_trigger_delta = 0.01
@@ -27,8 +27,14 @@ l_max_pol_g=25
 l_max_ur=50
 l_max_ncdm=50
 
-tol_perturb_integration=1.e-6
-perturb_sampling_stepsize=0.01
+#Maximum multipoles in the tensor hierarchy
+#This requires hierarchy = tam in the .ini file, otherwise the precision is too stiff for the optimal hierarchy.
+l_max_g_ten=50
+l_max_pol_g_ten=25
+l_max_ur_ten=50
+
+tol_perturbations_integration=1.e-8
+perturbations_sampling_stepsize=0.01
 
 radiation_streaming_approximation = 2
 radiation_streaming_trigger_tau_over_tau_k = 240.

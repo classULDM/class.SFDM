@@ -1,4 +1,4 @@
-CLASS: Cosmic Linear Anisotropy Solving System
+CLASS: Cosmic Linear Anisotropy Solving System  {#mainpage}
 ==============================================
 
 Authors: Julien Lesgourgues, Thomas Tram, Nils Schoeneberg
@@ -9,40 +9,6 @@ Montanari, Deanna Hooper, Samuel Brieden, Daniel Meinert, Matteo Lucca, etc.
 
 For download and information, see http://class-code.net
 
-Class.SFDM: Cosmic Linear Anisotropy Solving System for a Scalar Field Dark Matter
-==============================================
-
-Authors: T. Ferreira Chase, M. Leizerovich, D. López Nacir, S. Landau.
-
-For download see: https://github.com/classULDM/class.SFDM
-
-Based on CLASS v3.2 and CLASS.FreeSF by L. Arturo Urena-Lopez, see https://github.com/lurena-lopez/class.FreeSF
-
-This particular version of the CLASS code was amended to solve the case of a free scalar field as a dark matter component (dubbed as ScalarFieldDarkMater, or SFDM for short), endowed with a potential (1/2) m^2 phi^2, and using the formalism developed in the paper 'Towards accurate cosmological predictions for rapidly oscillating scalar fields as dark matter', by L. Arturo Ureña-López and Alma X. Gonzalez-Morales, published in JCAP 1607 (2016) no.07, 048. See also https://arxiv.org/abs/1511.08195.
-
-CLASS.FreeSF works as usual for CDM only, or for SFDM only, but also for a mixture of the two. Also, CLASS.FreeSF works seamlessly with all other tools made for and used by the original CLASS code.
-
-The set up of scalar field quantities follows closely the instructions of CLASS for scalar fields, see item 8) in the file explanatory.ini. In particular, to have a run with SFDM proceed as indicated below.
-    1. Omega_cdm must be specified in item 5). 
-        1a. Set Omega_cdm = 1.e-4 or smaller if a run is needed with SFDM as the only dark matter component. Beware that CLASS requires a non-zero value of Omega_cdm to correctly define the synchronous gauge of metric perturbations.
-        1b. Otherwise set Omega_cdm to your preferred value, and the SFDM budget will be calcualted internally (see below).
-    2. In item 8a):
-        2a. Omega_Lambda must be specified.
-        2b. Omega_fld must be specified.
-        2c. Omega_scf must be set to a negative value, and CLASS will calculate it internally from the fulfillment of the Friedmann constraint.
-    3. The scalar field parameters are given as entries in the row vector scf_parameters[] in item 8d). Here is a description of their meaning.
-        3a. scf_parameters[0]= boson mass in units of eV.
-        3b. scf_parameters[1]= initial value of the angular variable theta. The default value is the attractor solution, which is calculated internally. To modify this default behavior you must change item 8c) and then set scf_parameters[1] to your preferred initial value (do this under your own responsibility!).
-        3c. scf_parameters[2]= initial value of the density parameter Omega_phi. The default value is the attractor solution, which is calculated internally. To modify this default behavior you must change item 8c) and then set scf_parameters[2] to your preferred initial value (do this under your own responsibility!).
-        3d. scf_parameters[3]= 1.e-2 is the default value of the tuning parameter, see also item 8e). This default value has been tested for an ample range of boson masses, but it can be changed if necessary.
-        
-For concrete examples, see the file lcdm.ini for a run with the standard cold dark matter model, and the file lsfdm.ini for a run with the scalar field fulfilling the dark matter budget. See the CLASS documentation for information to change other cosmological parameters.
-
-You can use CLASS.FreeSF freely, provided that in your publications you cite the paper 'Towards accurate cosmological predictions for rapidly oscillating scalar fields as dark matter', JCAP 1607 (2016) no.07, 048, https://arxiv.org/abs/1511.08195
-
-Below is the original CLASS documentation, that you must follow for instructions about installation and compilation of the code.
-
-==============================================
 
 Compiling CLASS and getting started
 -----------------------------------

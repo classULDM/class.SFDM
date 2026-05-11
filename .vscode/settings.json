@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "cmath": "c",
+        "complex": "c"
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python-envs.pythonProjects": []
+}

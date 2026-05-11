@@ -150,6 +150,8 @@ struct perturbations
   int l_lss_max; /**< maximum l value for LSS \f$ C_l \f$'s (density and lensing potential in  bins) */
   double k_max_for_pk; /**< maximum value of k in 1/Mpc required for the output of P(k,z) and T(k,z) */
 
+  short want_lcmb_full_limber; /**< In general, do we want to use the full Limber scheme introduced in v3.2.2? With this full Limber scheme, the calculation of the CMB lensing potential spectrum C_l^phiphi for l > ppr->l_switch_limber is based on a new integration scheme. Compared to the previous scheme, which can be recovered by switching this parameter to _FALSE_, the new scheme uses a larger k_max and a coarser k-grid (or q-grid) than the CMB transfer function. The new scheme is used by default, because the old one is inaccurate at large l due to the too small k_max. */
+
   int selection_num;                            /**< number of selection functions
                                                    (i.e. bins) for matter density \f$ C_l \f$'s */
   enum selection_type selection;                /**< type of selection functions */
@@ -195,6 +197,8 @@ struct perturbations
   //@{
 
   enum possible_gauges gauge; /**< gauge in which to perform this calculation */
+
+  short has_matter_source_in_current_gauge; /**< whether to keep matter and baryon+CDM sources in current gauge, instead of automatic conversion to gauge-invariant variables */
 
   //@}
 
@@ -256,6 +260,7 @@ struct perturbations
   short has_source_theta_dcdm; /**< do we need source for theta of DCDM? */
   short has_source_theta_fld;  /**< do we need source for theta of dark energy? */
   short has_source_theta_scf;  /**< do we need source for theta of scalar field? */
+  short has_source_shear_scf;  /**< do we need source for shear of scalar field? */
   short has_source_theta_dr;   /**< do we need source for theta of ultra-relativistic neutrinos/relics? */
   short has_source_theta_ur;   /**< do we need source for theta of ultra-relativistic neutrinos/relics? */
   short has_source_theta_ncdm; /**< do we need source for theta of all non-cold dark matter species (e.g. massive neutrinos)? */
@@ -289,6 +294,7 @@ struct perturbations
   int index_tp_delta_dcdm;/**< index value for delta of DCDM */
   int index_tp_delta_fld;  /**< index value for delta of dark energy */
   int index_tp_delta_scf;  /**< index value for delta of scalar field */
+  int index_tp_delta_p_scf;
   int index_tp_delta_dr; /**< index value for delta of decay radiation */
   int index_tp_delta_ur; /**< index value for delta of ultra-relativistic neutrinos/relics */
   int index_tp_delta_idr; /**< index value for delta of interacting dark radiation */
@@ -305,6 +311,7 @@ struct perturbations
   int index_tp_theta_dcdm;  /**< index value for theta of DCDM */
   int index_tp_theta_fld;   /**< index value for theta of dark energy */
   int index_tp_theta_scf;   /**< index value for theta of scalar field */
+  int index_tp_shear_scf;   /**< index value for shear of scalar field */
   int index_tp_theta_ur;    /**< index value for theta of ultra-relativistic neutrinos/relics */
   int index_tp_theta_idr;   /**< index value for theta of interacting dark radiation */
   int index_tp_theta_idm;   /**< index value for theta of interacting dark matter */
@@ -317,6 +324,7 @@ struct perturbations
   int index_tp_psi;          /**< index value for metric fluctuation psi */
   int index_tp_h;            /**< index value for metric fluctuation h */
   int index_tp_h_prime;      /**< index value for metric fluctuation h' */
+  int index_tp_h_prime_prime;  /**< index value for metric fluctuation h'' */
   int index_tp_eta;          /**< index value for metric fluctuation eta */
   int index_tp_eta_prime;    /**< index value for metric fluctuation eta' */
   int index_tp_H_T_Nb_prime; /**< index value for metric fluctuation H_T_Nb' */
@@ -390,7 +398,6 @@ struct perturbations
                                final time range required for the output of
                                Fourier transfer functions (used for interpolations) */
   int ln_tau_size;         /**< total number of values in this array */
-  int index_ln_tau_pk;     /**< first index relevant for output of P(k,z) and T(k,z) */
 
   double *** late_sources; /**< Pointer towards the source interpolation table
                               late_sources[index_md]
@@ -439,6 +446,8 @@ struct perturbations
 
   ErrorMsg error_message; /**< zone for writing error messages */
 
+  short is_allocated; /**< flag is set to true if allocated */
+
   //@}
 
 };
@@ -473,13 +482,13 @@ struct perturbations_vector
   int index_pt_delta_fld;  /**< dark energy density in true fluid case */
   int index_pt_theta_fld;  /**< dark energy velocity in true fluid case */
   int index_pt_Gamma_fld;  /**< unique dark energy dynamical variable in PPF case */
-  
-  //Mati: comento los proximos dos y agrego 3
-  //int index_pt_phi_scf;  /**< scalar field density */
-  //int index_pt_phi_prime_scf;  /**< scalar field velocity */
+  int index_pt_phi_scf;  /**< scalar field density */
+  int index_pt_phi_prime_scf;  /**< scalar field velocity */
   int index_pt_omega_scf;  /**< scalar field frequency */
-  int index_pt_delta0_scf;  /**< scalar field first density contrast */
-  int index_pt_delta1_scf;  /**< scalar field second desnity contrast */
+  int index_pt_delta0L_scf;  /**< scalar field first density contrast */
+  int index_pt_delta1L_scf;  /**< scalar field second desnity contrast */
+  int index_pt_delta0T_scf;  /**< scalar field first density contrast */
+  int index_pt_delta1T_scf;  /**< scalar field second desnity contrast */
    
   int index_pt_delta_ur; /**< density of ultra-relativistic neutrinos/relics */
   int index_pt_theta_ur; /**< velocity of ultra-relativistic neutrinos/relics */

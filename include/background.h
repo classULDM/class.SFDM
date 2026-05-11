@@ -10,10 +10,6 @@
 #include "dei_rkck.h"
 #include "parser.h"
 
-/** list of possible types of spatial curvature */
-
-enum spatial_curvature {flat,open,closed};
-
 /** list of possible parametrisations of the DE equation of state */
 
 enum equation_of_state {CLP,EDE};
@@ -106,12 +102,13 @@ struct background
 
   double Omega0_lambda;    /**< \f$ \Omega_{0_\Lambda} \f$: cosmological constant */
   double Omega0_fld;       /**< \f$ \Omega_{0 de} \f$: fluid */
-  double Omega0_scf;       /**< \f$ \Omega_{0 scf} \f$: scalar field */
-
-  // Mati: agrego estos 3
-  double Omega_phi_ini_scf;        /**< \f$ \Omega_{0 scf} \f$ : scalar field 2*/
+  double Omega0_scf;       /**< \f$ \Omega_{0 vf} \f$: scalar field */
+  double theta_Ak;
+  double Omega_phi_ini_scf;        /**< \f$ \Omega_{0 vf} \f$ : scalar field 2*/
   double theta_phi_ini_scf;       /* Angular internal variable */
   double y_phi_ini_scf; /* Second potential variable normalized */
+
+  //double metric_shear_ini;  /* initial condition for \sigma_{\parallel} */
 
   short use_ppf; /**< flag switching on PPF perturbation equations instead of true fluid equations for perturbations. It could have been defined inside
                     perturbation structure, but we leave it here in such way to have all fld parameters grouped. */
@@ -125,8 +122,8 @@ struct background
   double * scf_parameters; /**< list of parameters describing the scalar field potential */
   short attractor_ic_scf;  /**< whether the scalar field has attractor initial conditions */
   int scf_tuning_index;    /**< index in scf_parameters used for tuning */
-  double phi_ini_scf;      /**< \f$ \phi(t_0) \f$: scalar field initial value */
-  double phi_prime_ini_scf;/**< \f$ d\phi(t_0)/d\tau \f$: scalar field initial derivative wrt conformal time */
+  //double phi_ini_scf;      /**< \f$ \phi(t_0) \f$: scalar field initial value */
+  //double phi_prime_ini_scf;/**< \f$ d\phi(t_0)/d\tau \f$: scalar field initial derivative wrt conformal time */
   int scf_parameters_size; /**< size of scf_parameters */
   double varconst_alpha; /**< finestructure constant for varying fundamental constants */
   double varconst_me; /**< electron mass for varying fundamental constants */
@@ -191,13 +188,12 @@ struct background
   int index_bg_rho_scf;       /**< scalar field energy density */
   int index_bg_p_scf;         /**< scalar field pressure */
   int index_bg_p_prime_scf;         /**< scalar field pressure */
+  int index_bg_Omega_scf;       /**< scalar field density parameter */
+  int index_bg_theta_scf; /**< scalar field angular variable */
+  int index_bg_y_scf;         /**< scalar field y_1 variable */
 
-  //Mati: agrego estos tres
-  int index_bg_Omega_phi_scf;       /**< scalar field density parameter */
-  int index_bg_theta_phi_scf; /**< scalar field angular variable */
-  int index_bg_y_phi_scf;         /**< scalar field y_1 variable */
-
-
+  //int index_bg_metric_shear;    /** metric_shear = \sigma_{\parallel} */
+  //int index_bg_metric_shear_prime;    /** metric_shear = \sigma_{\parallel}^{\prime} */
 
   int index_bg_rho_ncdm1;     /**< density of first ncdm species (others contiguous) */
   int index_bg_p_ncdm1;       /**< pressure of first ncdm species (others contiguous) */
@@ -224,10 +220,7 @@ struct background
 
   int index_bg_varc_alpha;    /**< value of fine structure constant in varying fundamental constants */
   int index_bg_varc_me;      /**< value of effective electron mass in varying fundamental constants */
-
-  //Mati: agrego este de abajo
   int index_bg_w_tot;         /**< Total EoS */
-
   int bg_size_short;  /**< size of background vector in the "short format" */
   int bg_size_normal; /**< size of background vector in the "normal format" */
   int bg_size;        /**< size of background vector in the "long format" */
@@ -275,13 +268,13 @@ struct background
   int index_bi_rho_dcdm;/**< {B} dcdm density */
   int index_bi_rho_dr;  /**< {B} dr density */
   int index_bi_rho_fld; /**< {B} fluid density */
-  
-  //Mati: comento los proximos dos y agrego 3  
   //int index_bi_phi_scf;       /**< {B} scalar field value */
   //int index_bi_phi_prime_scf; /**< {B} scalar field derivative wrt conformal time */
-  int index_bi_Omega_phi_scf; /**< {B} scalar field density parameter */
-  int index_bi_theta_phi_scf;       /**< {B} scalar field angular variable */
-  int index_bi_y_phi_scf; /**< {B} scalar field y_1 */
+  int index_bi_Omega_scf; /**< {B} scalar field density parameter */
+  int index_bi_theta_scf;       /**< {B} scalar field angular variable */
+  int index_bi_y_scf; /**< {B} scalar field y_1 */
+
+  //int index_bi_metric_shear; /** sigma_// */
 
   int index_bi_time;    /**< {C} proper (cosmological) time in Mpc */
   int index_bi_rs;      /**< {C} sound horizon */
@@ -349,6 +342,7 @@ struct background
 
   ErrorMsg error_message; /**< zone for writing error messages */
 
+  short is_allocated; /**< flag is set to true if allocated */
   //@}
 };
 
@@ -569,11 +563,8 @@ extern "C" {
   int background_output_budget(
                                struct background* pba
                                );
-  
-  
-  //Mati: comento las 4 funciones que vienen y agrego dos del seno y coseno.
+
   /** Scalar field potential and its derivatives **/
-  /*
   double V_scf(
                struct background *pba,
                double phi
@@ -588,16 +579,13 @@ extern "C" {
                  struct background *pba,
                  double phi
                  );
-  */
+
   /** Coupling between scalar field and matter **/
-  /*
   double Q_scf(
                struct background *pba,
                double phi,
                double phi_prime
                );
-  */
-  /** Scalar field variables. See background.c for more details. */
   double cos_scf(struct background *pba,
     	 double theta_phi
 		 );
