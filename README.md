@@ -1,4 +1,66 @@
-CLASS: Cosmic Linear Anisotropy Solving System  {#mainpage}
+CLASS.SFDM: Cosmic Linear Anisotropy Solving System for an Ultralight Scalar Field Dark Matter model
+==============================================
+
+Authors: Tomás Ferreira Chase
+
+In collaboration with M. Leizerovich, D. López Nacir, S. Landau.
+
+Overview
+--------
+
+This is a modification of CLASS v3.2.5 that replaces (or complements) the cold
+dark matter component with an ultralight Scalar Field Dark Matter (VFDM)
+candidate, based on arXiv:1511.08195. The code solves
+the full background evolution of the scalar field and its linear perturbations
+(scalar and tensor sectors), and is able to produce CMB angular power
+spectra and the linear matter power spectrum.
+
+What is new with respect to standard CLASS
+-------------------------------------------
+
+- New background species `scf` (scalar field) with its own energy density,
+  pressure, shear and anisotropic stress.
+
+Main SFDM input parameters
+--------------------------
+
+The new parameters are declared in the `.ini` file, together with the usual
+CLASS ones. The most relevant ones are:
+
+- `Omega_scf`         : present-day density fraction of the vector field.
+                       Replaces (fully or partially) `Omega_cdm`. The budget
+                       equation is closed automatically by shooting.
+- `scf_parameters`    : comma-separated list. The first entry is the vector
+                       field mass in eV (e.g. `1.e-22`). The remaining entries
+                       are used by the shooting / initial-condition machinery.
+                       Example: `vf_parameters = 1.e-22, 1.e-16, 1.e-30, 0.01`.
+
+
+Python / notebooks
+------------------
+
+In [notebooks/Python_wrapper/](notebooks/Python_wrapper/) we include the Jupyter
+notebooks used to produce the plots of the papers associated with this code,
+as well as further diagnostics. 
+
+Notebooks provided:
+
+- `Background.ipynb`              — background evolution of the scalar field.
+- `one_k.ipynb`                   — scalar perturbations at a single `k`.
+- `one_k_gamma_sweep.ipynb`       — similar to one_k (usefull for comparing with class.VFDM).
+- `Pk_parametrization.ipynb`,     — matter power spectrum (usefull for comparing with class.VFDM).
+  `Pk_errors.ipynb`               — comparison of matter power spectrum with CDM (usefull for comparing with class.VFDM).
+- `Velocity_invariant_transfer.ipynb` — velocity-invariant transfer function.
+
+The file class_env.yml lists the minimum requirements to create a conda environment for running CLASS.VFDM and the companion notebooks (tested on Ubuntu). Create it with conda env create -f class_env.yml and activate with conda activate class_env.
+
+
+Below is the original CLASS documentation, which should be followed for
+instructions about installation and compilation of the code.
+
+==============================================
+
+CLASS: Cosmic Linear Anisotropy Solving System
 ==============================================
 
 Authors: Julien Lesgourgues, Thomas Tram, Nils Schoeneberg
@@ -8,7 +70,6 @@ Audren, Simon Prunet, Jesus Torrado, Miguel Zumalacarregui, Francesco
 Montanari, Deanna Hooper, Samuel Brieden, Daniel Meinert, Matteo Lucca, etc.
 
 For download and information, see http://class-code.net
-
 
 Compiling CLASS and getting started
 -----------------------------------
